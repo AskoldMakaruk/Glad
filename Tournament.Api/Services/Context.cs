@@ -16,7 +16,7 @@ namespace Tournament.Api.Services
 
 			//optionsBuilder.UseSqlServer("");
 		}
-
+		
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
 			modelBuilder.Entity<Model.Tournament>(entity =>
