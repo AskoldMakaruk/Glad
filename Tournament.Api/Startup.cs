@@ -27,6 +27,7 @@ namespace Tournament.Api
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
+
 			services.AddControllers();
 			services.AddSwaggerGen(c => { c.SwaggerDoc("v1", new OpenApiInfo {Title = "Tournament.Api", Version = "v1"}); });
 			services.AddDbContext<Context>();
@@ -41,7 +42,7 @@ namespace Tournament.Api
 				app.UseSwagger();
 				app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Tournament.Api v1"));
 			}
-
+			app.UseCors(x => x.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin());
 			app.UseHttpsRedirection();
 
 			app.UseRouting();

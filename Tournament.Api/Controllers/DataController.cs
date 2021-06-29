@@ -1,6 +1,8 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Tournament.Api.Services;
+using Tournament.Model;
 
 namespace Tournament.Api.Controllers
 {
@@ -21,15 +23,10 @@ namespace Tournament.Api.Controllers
 		}
 
 		[HttpPost("add")]
-		public IActionResult AddTournament(string name, int roundCount, int pricepool)
+		public IActionResult AddTournament([FromBody] Championship championship)
 		{
-			_context.Tournaments.Add(new Model.Championship
-			{
-				RoundCount = roundCount,
-				TournamentName = name,
-				TournamentPrizePool = pricepool
-			});
-			
+			_context.Tournaments.Add(championship);
+			_context.SaveChanges();
 			return Ok();
 		}
 	}

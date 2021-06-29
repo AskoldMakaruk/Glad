@@ -1,0 +1,19 @@
+﻿@using Tournament.Model
+@inject HttpClient Http
+
+
+<h3>TournamentForm</h3>
+<EditForm Model="_championship" OnSubmit="Submit">
+    <InputText @bind-Value="_championship.TournamentName">Name</InputText>
+    <button type="submit">Submit</button>
+</EditForm>
+
+@code {
+    private Championship _championship = new();
+
+    private async Task Submit()
+    {
+        await Http.PostAsJsonAsync("https://localhost:5011/Data/add", _championship);
+    }
+
+}
