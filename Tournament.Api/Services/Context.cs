@@ -5,6 +5,8 @@ namespace Tournament.Api.Services
 {
 	public class Context : DbContext
 	{
+		public DbSet<Tournament.Model.Championship> Tournaments { get; set; }
+
 		public Context()
 		{
 			Database.EnsureCreated();
@@ -16,14 +18,14 @@ namespace Tournament.Api.Services
 
 			//optionsBuilder.UseSqlServer("");
 		}
-		
+
 		protected override void OnModelCreating(ModelBuilder modelBuilder)
 		{
-			modelBuilder.Entity<Model.Tournament>(entity =>
+			modelBuilder.Entity<Model.Championship>(entity =>
 			{
 				entity.HasKey(e => e.TournamentID);
 				entity.HasMany(e => e.Games)
-					.WithOne(e => e.Tournament)
+					.WithOne(e => e.Championship)
 					.HasForeignKey(e => e.TournamentID)
 					.OnDelete(DeleteBehavior.Cascade);
 			});
@@ -31,13 +33,13 @@ namespace Tournament.Api.Services
 			modelBuilder.Entity<TournamentTeam>(entity =>
 			{
 				entity.HasKey(e => new {e.TournamentID, e.TeamID});
-				
+
 				entity.HasOne(e => e.Team)
 					.WithMany(e => e.TournamentTeams)
 					.HasForeignKey(e => e.TeamID)
 					.OnDelete(DeleteBehavior.Cascade);
 
-				entity.HasOne(e => e.Tournament)
+				entity.HasOne(e => e.Championship)
 					.WithMany(e => e.TournamentTeams)
 					.HasForeignKey(e => e.TournamentID)
 					.OnDelete(DeleteBehavior.Cascade);
@@ -47,26 +49,16 @@ namespace Tournament.Api.Services
 			{
 				entity.HasKey(e => e.GameID);
 
-				entity.HasOne(e => e.Team1)
-					.WithMany(e => e.Games)
-					.HasForeignKey(e => e.GameID)
-					.OnDelete(DeleteBehavior.Cascade);
-				
-				entity.HasOne(e => e.Team2)
-					.WithMany(e => e.Games)
-					.HasForeignKey(e => e.GameID)
-					.OnDelete(DeleteBehavior.Cascade);
-				
+				entity.HasMany(e => e.Participants)
+					.WithMany(e => e.ParticiparedGames);
+
 				entity.HasOne(e => e.Winner)
-					.WithMany(e => e.Games)
+					.WithMany(e => e.WonGames)
 					.HasForeignKey(e => e.GameID)
 					.OnDelete(DeleteBehavior.Cascade);
 			});
-			
-			modelBuilder.Entity<Team>(entity =>
-			{
-				entity.HasKey(e => e.TeamID);
-			});
+
+			modelBuilder.Entity<Team>(entity => { entity.HasKey(e => e.TeamID); });
 		}
 	}
 }
