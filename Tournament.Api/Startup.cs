@@ -24,14 +24,15 @@ namespace Tournament.Api
 
 		public IConfiguration Configuration { get; }
 
-		// This method gets called by the runtime. Use this method to add services to the container.
-		public void ConfigureServices(IServiceCollection services)
-		{
+        // This method gets called by the runtime. Use this method to add services to the container.
+        public void ConfigureServices(IServiceCollection services)
+        {
+            services.AddSwaggerGen(c => { c.SwaggerDoc("v1", new OpenApiInfo { Title = "Tournament.Api", Version = "v1" }); });
+            services.AddDbContext<Context>(builder => builder.UseSqlServer(Configuration.GetConnectionString("Default")));
 
-			services.AddControllers();
-			services.AddSwaggerGen(c => { c.SwaggerDoc("v1", new OpenApiInfo {Title = "Tournament.Api", Version = "v1"}); });
-			services.AddDbContext<Context>();
-		}
+            services.AddControllersWithViews();
+            services.AddRazorPages();
+        }
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
 		public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

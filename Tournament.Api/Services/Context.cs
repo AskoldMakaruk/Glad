@@ -49,8 +49,10 @@ namespace Tournament.Api.Services
 			{
 				entity.HasKey(e => e.GameID);
 
-				entity.HasMany(e => e.Participants)
-					.WithMany(e => e.ParticiparedGames);
+                entity.HasMany(e => e.Participants)
+                    .WithOne(e => e.Game)
+                    .HasForeignKey(e => e.GameID)
+                    .OnDelete(DeleteBehavior.Cascade);
 
 				entity.HasOne(e => e.Winner)
 					.WithMany(e => e.WonGames)
@@ -58,7 +60,15 @@ namespace Tournament.Api.Services
 					.OnDelete(DeleteBehavior.Cascade);
 			});
 
-			modelBuilder.Entity<Team>(entity => { entity.HasKey(e => e.TeamID); });
-		}
-	}
+            modelBuilder.Entity<Team>(entity =>
+            {
+                entity.HasKey(e => e.TeamID);
+
+                entity.HasMany(e => e.ParticiparedGames)
+                    .WithOne(e => e.Team)
+                    .HasForeignKey(e => e.TeamID)
+                    .OnDelete(DeleteBehavior.NoAction);
+            });
+        }
+    }
 }
