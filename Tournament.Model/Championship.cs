@@ -40,18 +40,27 @@ namespace Tournament.Model
 		public int Round { get; set; }
 		public int TournamentID { get; set; }
 
-		public Championship Championship { get; set; }
-		public ICollection<Team> Participants { get; set; }
-		public Team Winner { get; set; }
-	}
+        public Championship Championship { get; set; }
+        public ICollection<GameTeam> Participants { get; set; }
+        public Team Winner { get; set; }
+    }
 
-	public class Team
-	{
-		public int TeamID { get; set; }
-		public string TeamName { get; set; }
+    public class GameTeam
+    {
+        public int GameID { get; set; }
+        public int TeamID { get; set; }
 
-		public ICollection<Game> ParticiparedGames { get; set; }
-		public ICollection<Game> WonGames { get; set; }
-		public ICollection<TournamentTeam> TournamentTeams { get; set; }
-	}
+        public Game Game { get; set; }
+        public Team Team { get; set; }
+    }
+
+    public class Team
+    {
+        public int TeamID { get; set; }
+        public string TeamName { get; set; }
+
+        public ICollection<GameTeam> ParticiparedGames { get; set; }
+        public ICollection<Game> WonGames { get; set; }
+        public ICollection<TournamentTeam> TournamentTeams { get; set; }
+    }
 }
